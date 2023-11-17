@@ -1,0 +1,15 @@
+const double s = 12;
+const double m = 14;
+const double l = 16;
+const double xl = 18;
+const double xxl = 20;
+const double xxxl = 22;
+const double xxxxl = 24;
+const double xxxxxl = 26;
+const double xxxxxxl = 28;
+const double xxxxxxxl = 30;
+const double xxxxxxxxl = 32;
+const double xxxxxxxxxl = 34;
+const double xxxxxxxxxxl = 36;
+const double xxxxxxxxxxxl = 38;
+const double xxxxxxxxxxxxl = 40;

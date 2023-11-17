@@ -3,10 +3,10 @@ import 'package:chat_assessment/service/routing_service.dart';
 import 'package:chat_assessment/service/service_locator.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
 import 'firebase_options.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   setupLocator();
 
   await Firebase.initializeApp(

@@ -10,6 +10,14 @@ class UserListView extends StackedView<UserViewModel> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Users"),
+        actions: [
+          IconButton(
+            onPressed: () {
+              viewModel.signOut();
+            },
+            icon: const Icon(Icons.logout),
+          ),
+        ],
       ),
       body: ListView.builder(
         itemCount: 20,

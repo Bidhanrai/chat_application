@@ -1,3 +1,4 @@
+import 'package:chat_assessment/service/auth_service/auth_service.dart';
 import 'package:chat_assessment/service/navigation_service.dart';
 import 'package:chat_assessment/service/routing_service.dart';
 import 'package:chat_assessment/service/service_locator.dart';
@@ -7,5 +8,9 @@ class UserViewModel extends BaseViewModel {
 
   goToChat() {
     locator<NavigationService>().navigateToAndBack(chatView);
+  }
+
+  signOut() {
+    locator<AuthService>().signOut();
   }
 }

@@ -33,7 +33,7 @@ class _SplashViewState extends State<SplashView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Icon(Icons.android, size: 100, color: Colors.blue.shade600,),
+        child: Icon(Icons.flutter_dash, size: 100, color: Colors.blue.shade600,),
       ),
     );
   }

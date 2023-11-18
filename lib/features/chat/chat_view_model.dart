@@ -6,9 +6,6 @@ import 'package:stacked/stacked.dart';
 
 class ChatViewModel extends BaseViewModel {
 
-  TextEditingController messageController = TextEditingController();
-
-
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
@@ -26,6 +23,8 @@ class ChatViewModel extends BaseViewModel {
   }
 
 
+  TextEditingController messageController = TextEditingController();
+
   sendMessage(String receiverId, String receiverName) async {
     if(messageController.text.trim().isEmpty) return;
 
@@ -40,6 +39,7 @@ class ChatViewModel extends BaseViewModel {
       senderId: senderId,
     );
 
+
     _firebaseFirestore
         .collection("conversation")
         .doc(conversationId)
@@ -49,10 +49,15 @@ class ChatViewModel extends BaseViewModel {
   }
 
 
+  //Logic to make sure conversation id is unique for any two users chat
   String getConversationId(String senderId, String receiverId) {
     List<String> ids = [senderId, receiverId];
     ids.sort();
     String conversationId = ids.join("_");
     return conversationId;
+  }
+
+  disposeController() {
+    messageController.dispose();
   }
 }

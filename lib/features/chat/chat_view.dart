@@ -37,6 +37,7 @@ class ChatView extends StackedView<ChatViewModel> {
                 child: NotificationListener(
                   onNotification: (ScrollNotification scrollInfo) {
                     if (scrollInfo.metrics.pixels >= scrollInfo.metrics.maxScrollExtent - 50) {}
+                    ///TODO: can implement pagination here for old chat messages
                     return true;
                   },
                   child: ListView.separated(
@@ -45,10 +46,9 @@ class ChatView extends StackedView<ChatViewModel> {
                     reverse: true,
                     itemCount: snapshot.data!.size,
                     itemBuilder: (context, index) {
-                      // if(viewModel.busy(viewModel.chatMessages) && index == viewModel.chatMessages.length-1) {
+                      // if(viewModel.busy(viewModel.chatMessages) && index == snapshot.data!.size-1) {
                       //   return const LoadingWidget();
                       // }
-                      // return _chatBubble(context, viewModel.chatMessages[index], viewModel);
                       MessageModel message = snapshot.data!.docs[index].data();
                       return _chatBubble(context, message);
                     },
@@ -111,7 +111,7 @@ class ChatView extends StackedView<ChatViewModel> {
             ? Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: CircleAvatar(
-                  child: Text(message.receiverName.initials()),
+                  child: Text(receiverName.initials()),
                 ),
               )
             : const SizedBox(),
@@ -130,7 +130,7 @@ class ChatView extends StackedView<ChatViewModel> {
               !yourMessage
                   ? Padding(
                       padding: const EdgeInsets.only(bottom: 4.0),
-                      child: Text(message.receiverName, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),),
+                      child: Text(receiverName, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),),
                     )
                   : const SizedBox(),
               Text(message.message, style: TextStyle(color: yourMessage?Colors.black:Colors.white),),
@@ -143,42 +143,13 @@ class ChatView extends StackedView<ChatViewModel> {
     );
   }
 
-  //
-  // Widget _actionMenu(BuildContext context, ChatViewModel viewModel) {
-  //   return PopupMenuButton<String>(
-  //     onSelected: (String item) {
-  //       if(item == "Close") {
-  //         showConfirmationPopUp(
-  //           // title: viewModel.chatModel!.chatDetail.chatName,
-  //           // message: "Closing the chat ${viewModel.chatModel!.chatDetail.chatName}",
-  //           title: "Are you sure you want to close the chat?",
-  //           message: "Closing the chat ${viewModel.chatModel!.chatDetail.chatName}. You cannot undo it.",
-  //           callback: () {
-  //             locator<NavigationService>().goBack();
-  //             viewModel.closeChat(viewModel.chatModel!.chatId);
-  //           },
-  //         );
-  //       }
-  //     },
-  //     position: PopupMenuPosition.under,
-  //     enabled: !viewModel.chatIsClosed(viewModel.chatModel!.user.id == context.read<AccountViewModel>().user?.userId),
-  //     itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-  //       const PopupMenuItem<String>(
-  //           value: "Close",
-  //           child: Row(
-  //             mainAxisSize: MainAxisSize.min,
-  //             children: [
-  //               Icon(Icons.close, color: Colors.red),
-  //               SizedBox(width: 10),
-  //               Text('Close chat'),
-  //             ],
-  //           )
-  //       )
-  //     ],
-  //
-  //   );
-  // }
 
   @override
   ChatViewModel viewModelBuilder(BuildContext context) => ChatViewModel();
+
+  @override
+  void onDispose(ChatViewModel viewModel) {
+    super.onDispose(viewModel);
+    viewModel.disposeController();
+  }
 }

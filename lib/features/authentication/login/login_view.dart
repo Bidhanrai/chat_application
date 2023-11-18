@@ -36,7 +36,7 @@ class LoginView extends StackedView<LoginViewModel> {
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: <Widget>[
-                              Icon(Icons.android, size: 60, color: Colors.blue.shade600),
+                              Icon(Icons.flutter_dash, size: 60, color: Colors.blue.shade600),
                               const SizedBox(height: 12),
                               const Text(
                                 "HELLO THERE",

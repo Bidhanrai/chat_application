@@ -27,6 +27,8 @@ class SignUpViewModel extends BaseViewModel {
   }
 
 
+  //TODO: Email verification is not implemented
+  //TODO: Forget password not implemented
   register() async {
     if(!formKey.currentState!.validate()) {
       return;

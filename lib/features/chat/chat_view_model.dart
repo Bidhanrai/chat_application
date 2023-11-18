@@ -40,7 +40,6 @@ class ChatViewModel extends BaseViewModel {
       senderId: senderId,
     );
 
-    // await runBusyFuture();
     _firebaseFirestore
         .collection("conversation")
         .doc(conversationId)

@@ -3,6 +3,7 @@ import 'package:chat_assessment/features/profile/profile_view.dart';
 import 'package:chat_assessment/features/user/user_model.dart';
 import 'package:chat_assessment/features/user/users_view_model.dart';
 import 'package:chat_assessment/utils/extensions.dart';
+import 'package:chat_assessment/utils/format_date.dart';
 import 'package:chat_assessment/widgets/loading_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ class UserListView extends StackedView<UserViewModel> {
   @override
   Widget builder(BuildContext context, UserViewModel viewModel, Widget? child) {
     return StreamBuilder<QuerySnapshot<UserModel>>(
-      stream: viewModel.usersStream,
+      stream: viewModel.usersListStream,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return const Text('Something went wrong');
@@ -43,7 +44,7 @@ class UserListView extends StackedView<UserViewModel> {
                   child: Text(user.firstName.initials().toUpperCase(), style: const TextStyle(color: lightBlack),),
                 ),
                 title: Text("${user.firstName} ${user.lastName}".capitalize(), maxLines: 1, overflow: TextOverflow.ellipsis,),
-                subtitle: const Text("Hey there how you been doing sir", maxLines: 2, overflow: TextOverflow.ellipsis,),
+                subtitle: Text("Joined: ${formatDate(user.createdAt.toDate().toIso8601String())}", maxLines: 2, overflow: TextOverflow.ellipsis,),
               );
             },
           ),

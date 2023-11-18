@@ -20,7 +20,7 @@ class _SplashViewState extends State<SplashView> {
   }
 
   _checkIfUserLoggedIn() async {
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 1), () {
       if(locator<AuthService>().isUserLoggedIn) {
         locator<NavigationService>().navigateToAndRemoveAll(userListView);
       } else {
@@ -31,9 +31,9 @@ class _SplashViewState extends State<SplashView> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
-        child: Text("Brand Logo"),
+        child: Icon(Icons.android, size: 100, color: Colors.blue.shade600,),
       ),
     );
   }

@@ -11,7 +11,7 @@ import 'package:stacked/stacked.dart';
 
 class UserViewModel extends BaseViewModel {
 
-  final Stream<QuerySnapshot<UserModel>> usersStream = FirebaseFirestore.instance.collection('users').withConverter<UserModel>(
+  final Stream<QuerySnapshot<UserModel>> usersListStream = FirebaseFirestore.instance.collection('users').withConverter<UserModel>(
     fromFirestore: (snapshots, _) => UserModel.fromJson(snapshots.data()!),
     toFirestore: (users, _) => users.toJson(),
   ).where('id', isNotEqualTo: FirebaseAuth.instance.currentUser?.uid).snapshots();

@@ -36,28 +36,30 @@ class LoginView extends StackedView<LoginViewModel> {
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: <Widget>[
-                              const Icon(Icons.android, size: 60),
-                              const SizedBox(height: 32),
+                              Icon(Icons.android, size: 60, color: Colors.blue.shade600),
+                              const SizedBox(height: 12),
                               const Text(
-                                "HELLO AGAIN",
+                                "HELLO THERE",
                                 style: TextStyle(
                                   fontSize: xxxxxl,
                                   fontWeight: FontWeight.w500,
                                   letterSpacing: 0,
+                                  height: 0,
                                 ),
                                 textAlign: TextAlign.center,
                               ),
                               const Text(
-                                "Welcome back, you've been missed",
+                                "Welcome back, we missed you",
                                 style: TextStyle(
                                   fontSize: l,
                                   fontWeight: FontWeight.w400,
                                   letterSpacing: 0,
-                                  color: lightBlack
+                                  color: lightBlack,
+                                  height: 0,
                                 ),
                                 textAlign: TextAlign.center,
                               ),
-                              const SizedBox(height: 12),
+                              const SizedBox(height: 24),
                               CustomTextFormField(
                                 controller: viewModel.emailController,
                                 hintText: "Email",

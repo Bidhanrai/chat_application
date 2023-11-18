@@ -63,17 +63,20 @@ class LoginViewModel extends BaseViewModel {
 
   _addUserDetails(UserCredential userCredential) async {
     try {
-      await FirebaseFirestore.instance.collection("users").doc(userCredential.user!.uid).set({
-        "id": userCredential.user!.uid,
-        "first name": userCredential.user?.displayName!= null
-            ? userCredential.user?.displayName!.split(" ").first
-            : "",
-        "last name": userCredential.user?.displayName!= null
-            ? userCredential.user?.displayName!.split(" ").last
-            : "",
-        "email": userCredential.user?.email,
-        "created at": DateTime.now(),
-      });
+      if(!(await FirebaseFirestore.instance.collection("users").doc(userCredential.user!.uid).get()).exists) {
+        await FirebaseFirestore.instance.collection("users").doc(userCredential.user!.uid).set({
+          "id": userCredential.user!.uid,
+          "first name": userCredential.user?.displayName!= null
+              ? userCredential.user?.displayName!.split(" ").first
+              : "",
+          "last name": userCredential.user?.displayName!= null
+              ? userCredential.user?.displayName!.split(" ").last
+              : "",
+          "email": userCredential.user?.email,
+          "created at": DateTime.now(),
+        });
+      }
+
     } catch(e) {
       rethrow;
     }

@@ -14,8 +14,8 @@ class CustomButton extends StatelessWidget {
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(Colors.blue),
         foregroundColor: MaterialStateProperty.all(Colors.white),
-        padding: MaterialStateProperty.all(const EdgeInsets.symmetric(vertical: 12)),
-        // shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+        padding: MaterialStateProperty.all(const EdgeInsets.symmetric(vertical: 16)),
+        shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
       ),
       child: isBusy
           ? const LoadingWidget()

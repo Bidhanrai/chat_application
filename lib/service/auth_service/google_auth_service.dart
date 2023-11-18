@@ -24,4 +24,8 @@ class GoogleAuthService {
       rethrow;
     }
   }
+
+  signOut() async {
+    await GoogleSignIn().signOut();
+  }
 }

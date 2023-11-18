@@ -1,8 +1,13 @@
+import 'package:chat_assessment/constants/app_color.dart';
+import 'package:chat_assessment/constants/font_size.dart';
 import 'package:chat_assessment/features/authentication/login/login_view_model.dart';
+import 'package:chat_assessment/service/navigation_service.dart';
 import 'package:chat_assessment/widgets/loading_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+import '../../../service/routing_service.dart';
+import '../../../service/service_locator.dart';
 import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_icon_button.dart';
 import '../../../widgets/custom_text_form_field.dart';
@@ -30,7 +35,29 @@ class LoginView extends StackedView<LoginViewModel> {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
+                            children: <Widget>[
+                              const Icon(Icons.android, size: 60),
+                              const SizedBox(height: 32),
+                              const Text(
+                                "HELLO AGAIN",
+                                style: TextStyle(
+                                  fontSize: xxxxxl,
+                                  fontWeight: FontWeight.w500,
+                                  letterSpacing: 0,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              const Text(
+                                "Welcome back, you've been missed",
+                                style: TextStyle(
+                                  fontSize: l,
+                                  fontWeight: FontWeight.w400,
+                                  letterSpacing: 0,
+                                  color: lightBlack
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 12),
                               CustomTextFormField(
                                 controller: viewModel.emailController,
                                 hintText: "Email",
@@ -68,15 +95,11 @@ class LoginView extends StackedView<LoginViewModel> {
                               const SizedBox(height: 16),
                               CustomButton(
                                 isBusy: viewModel.isBusy,
-                                label: viewModel.viewState == LoginViewState.login?"Login":"Register",
+                                label: "Login",
                                 onPressed: viewModel.isBusy
                                     ? null
                                     : () {
-                                        if(viewModel.viewState == LoginViewState.login) {
-                                          viewModel.login();
-                                        } else {
-                                          viewModel.register();
-                                        }
+                                        viewModel.login();
                                       },
                               ),
 
@@ -122,12 +145,12 @@ class LoginView extends StackedView<LoginViewModel> {
                   ),
                   Text.rich(
                     TextSpan(
-                      text: viewModel.viewState == LoginViewState.login?"Don't have an account?":"Already have an account?",
+                      text: "Don't have an account?",
                       children: [
                         TextSpan(
-                            recognizer: TapGestureRecognizer()..onTap = () => viewModel.changeLoginViewSate(),
+                            recognizer: TapGestureRecognizer()..onTap = () => locator<NavigationService>().navigateTo(signUpView),
                           style: const TextStyle(color: Colors.blue),
-                          text: viewModel.viewState == LoginViewState.login?" Register here": " Login here"
+                          text: " Register here"
                         )
                       ]
                     )
@@ -136,7 +159,7 @@ class LoginView extends StackedView<LoginViewModel> {
               ),
             ),
           ),
-          viewModel.busy(viewModel.socialSignUpBusyKey)
+          viewModel.busy(viewModel.socialSignInBusyKey)
               ? Container(color: Colors.black38,child: const LoadingWidget())
               : const SizedBox()
         ],

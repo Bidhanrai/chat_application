@@ -19,4 +19,8 @@ class FacebookAuthService {
       rethrow;
     }
   }
+
+  signOut() async {
+    await FacebookAuth.instance.logOut();
+  }
 }

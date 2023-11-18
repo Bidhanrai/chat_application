@@ -3,25 +3,15 @@ import 'package:chat_assessment/service/auth_service/facebook_auth_service.dart'
 import 'package:chat_assessment/service/auth_service/google_auth_service.dart';
 import 'package:chat_assessment/service/routing_service.dart';
 import 'package:chat_assessment/utils/toast_message.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:stacked/stacked.dart';
 import '../../../service/navigation_service.dart';
 import '../../../service/service_locator.dart';
 
 
 class LoginViewModel extends BaseViewModel {
-
-  LoginViewState _viewState = LoginViewState.login;
-  LoginViewState get viewState => _viewState;
-  changeLoginViewSate() {
-    _viewState = _viewState==LoginViewState.login?LoginViewState.register:LoginViewState.login;
-    emailController.clear();
-    passwordController.clear();
-    notifyListeners();
-  }
-
 
   final AuthService _authService = locator<AuthService>();
 
@@ -35,40 +25,17 @@ class LoginViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  UserCredential? _userCredential;
-  UserCredential? get userCredential => _userCredential;
   login() async {
+    if(!formKey.currentState!.validate()) {
+      return;
+    }
     setBusy(true);
+    FocusManager.instance.primaryFocus?.unfocus();
     try {
-      if(!formKey.currentState!.validate()) {
-        return;
-      }
-      _userCredential = await _authService.login(email: emailController.text, password: passwordController.text);
-      if(_userCredential != null) {
+      await _authService.login(email: emailController.text, password: passwordController.text).then((UserCredential userCredential) {
         locator<NavigationService>().navigateToAndRemoveAll(userListView);
-      }
-    } catch(e) {
-      if (kDebugMode) {
-        print(e);
-      }
-      toastMessage(message: "$e");
-    } finally {
-      setBusy(false);
-    }
-  }
+      });
 
-
-  register() async {
-    setBusy(true);
-    try {
-      if(!formKey.currentState!.validate()) {
-        return;
-      }
-      _userCredential = await _authService.register(email: emailController.text, password: passwordController.text);
-      if(_userCredential != null) {
-        toastMessage(message: "User registered!");
-        changeLoginViewSate();
-      }
     } catch(e) {
       toastMessage(message: "$e");
     } finally {
@@ -78,42 +45,52 @@ class LoginViewModel extends BaseViewModel {
 
 
 
-  final String socialSignUpBusyKey = "socialSignUpBusyKey";
+  final String socialSignInBusyKey = "socialSignInBusyKey";
 
   final GoogleAuthService _googleAuthService = locator<GoogleAuthService>();
   signInWithGoogle() async {
-    setBusyForObject(socialSignUpBusyKey, true);
+    setBusyForObject(socialSignInBusyKey, true);
     try {
-      _userCredential = await _googleAuthService.signInWithGoogle();
-      if(_userCredential != null) {
-        locator<NavigationService>().navigateToAndRemoveAll(userListView);
-      }
+      UserCredential userCredential = await _googleAuthService.signInWithGoogle();
+      await _addUserDetails(userCredential);
+      locator<NavigationService>().navigateToAndRemoveAll(userListView);
     } catch(e) {
-      if (kDebugMode) {
-        print(e);
-      }
       toastMessage(message: "$e");
     } finally {
-      setBusyForObject(socialSignUpBusyKey, false);
+      setBusyForObject(socialSignInBusyKey, false);
+    }
+  }
+
+  _addUserDetails(UserCredential userCredential) async {
+    try {
+      await FirebaseFirestore.instance.collection("users").doc(userCredential.user!.uid).set({
+        "id": userCredential.user!.uid,
+        "first name": userCredential.user?.displayName!= null
+            ? userCredential.user?.displayName!.split(" ").first
+            : "",
+        "last name": userCredential.user?.displayName!= null
+            ? userCredential.user?.displayName!.split(" ").last
+            : "",
+        "email": userCredential.user?.email,
+        "created at": DateTime.now(),
+      });
+    } catch(e) {
+      rethrow;
     }
   }
 
 
   final FacebookAuthService _facebookAuthService = locator<FacebookAuthService>();
   signInWithFacebook() async {
-    setBusyForObject(socialSignUpBusyKey, true);
+    setBusyForObject(socialSignInBusyKey, true);
     try {
-      _userCredential = await _facebookAuthService.signInWithFacebook();
-      if(_userCredential != null) {
-        locator<NavigationService>().navigateToAndRemoveAll(userListView);
-      }
+      UserCredential userCredential = await _facebookAuthService.signInWithFacebook();
+      await _addUserDetails(userCredential);
+      locator<NavigationService>().navigateToAndRemoveAll(userListView);
     } catch(e) {
-      if (kDebugMode) {
-        print(e);
-      }
       toastMessage(message: "$e");
     } finally {
-      setBusyForObject(socialSignUpBusyKey, false);
+      setBusyForObject(socialSignInBusyKey, false);
     }
   }
 
@@ -122,9 +99,4 @@ class LoginViewModel extends BaseViewModel {
     emailController.dispose();
     passwordController.dispose();
   }
-}
-
-enum LoginViewState {
-  login,
-  register;
 }

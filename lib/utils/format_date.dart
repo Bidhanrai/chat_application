@@ -1,15 +1,17 @@
 import 'package:intl/intl.dart';
 
 String formatDateInLanguageDynamic(String dateString) {
-  String date = DateFormat().format(DateTime.parse(dateString).toLocal());
-  if(date == DateFormat().format(DateTime.now().toLocal())) {
+  if(DateTime.parse(dateString).day == DateTime.now().day) {
     String todayDate = "Today, ${DateFormat.jm().format(DateTime.parse(dateString).toLocal())}";
     return todayDate;
-  } else if(date == DateFormat().format(DateTime.now().subtract(const Duration(days: 1)).toLocal())) {
+  } else if(DateTime.parse(dateString).day == DateTime.now().subtract(const Duration(days: 1)).day) {
     String yesterdayDate = "Yesterday, ${DateFormat.MMMd().format(DateTime.parse(dateString).toLocal())}";
     return yesterdayDate;
-  }
-  else {
+  } else {
     return DateFormat.yMMMEd().format(DateTime.parse(dateString).toLocal());
   }
+}
+
+String formatDate(String dateString) {
+  return "${DateFormat.yMMMd().format(DateTime.parse(dateString).toLocal())}, ${DateFormat.jm().format(DateTime.parse(dateString).toLocal())}";
 }

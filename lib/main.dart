@@ -28,7 +28,11 @@ class MyApp extends StatelessWidget {
         title: 'Chat Application',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+          appBarTheme: const AppBarTheme(
+            color: Colors.blue,
+            foregroundColor: Colors.white
+          ),
           useMaterial3: true,
         ),
         navigatorKey: locator<NavigationService>().navigationKey,

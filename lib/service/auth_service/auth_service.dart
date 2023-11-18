@@ -6,7 +6,7 @@ import '../service_locator.dart';
 
 class AuthService {
   AuthService() {
-    FirebaseAuth.instance.userChanges().listen((User? user) {
+    FirebaseAuth.instance.userChanges().listen((User? user) async {
       if (user == null) {
         if (kDebugMode) {
           print('User is currently signed out!');
@@ -46,9 +46,7 @@ class AuthService {
       if (kDebugMode) {
         print(e.code);
       }
-      throw e.code;
-    } catch(e) {
-      rethrow;
+      throw Exception(e.code);
     }
   }
 
